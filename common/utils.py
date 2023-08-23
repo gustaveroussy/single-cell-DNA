@@ -354,7 +354,7 @@ def make_yaml(config_file):
     try:
         reference_genome_path=config_file["reference_genome_path"]
     except KeyError:
-        reference_genome_path='/mnt/beegfs/pipelines/single-cell_dna/1.0/tapestri/genome/hg19/hg19/ucsc_hg19.fa'
+        reference_genome_path='/mnt/beegfs/pipelines/single-cell_dna/tapestri_database/v2/hg19/ucsc_hg19.fa'
     try:
         reference_genome=config_file["reference_genome"]
     except KeyError:
@@ -377,9 +377,9 @@ def make_yaml(config_file):
                 protein_barcodes=protein_panel+"/"+str([f for f in os.listdir(protein_panel) if re.search(pattern_csv_file,f)][0])
                 
             except KeyError:
-                protein_adapter_3='/mnt/beegfs/pipelines/single-cell_dna/1.0/tapestri/genome/panels/protein/ab_adapters_3.fasta'
-                protein_adapter_5='/mnt/beegfs/pipelines/single-cell_dna/1.0/tapestri/genome/panels/protein/ab_adapters_5.fasta'
-                protein_barcodes='/mnt/beegfs/pipelines/single-cell_dna/1.0/tapestri/genome/panels/protein/totalseq-d-heme-oncology.csv'
+                protein_adapter_3='/mnt/beegfs/pipelines/single-cell_dna/tapestri_database/v2/panels/protein/ab_adapters_3.fasta'
+                protein_adapter_5='/mnt/beegfs/pipelines/single-cell_dna/tapestri_database/v2/panels/protein/ab_adapters_5.fasta'
+                protein_barcodes='/mnt/beegfs/pipelines/single-cell_dna/tapestri_database/v2/panels/protein/totalseq-d-heme-oncology.csv'
                 
             prot_r1=str([f for f in design_file.iloc[row]["protein_file"].split(",") if re.search(pattern_r1,f)][0])
             prot_r2=str([f for f in design_file.iloc[row]["protein_file"].split(",") if re.search(pattern_r2,f)][0])
