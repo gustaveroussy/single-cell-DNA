@@ -1,0 +1,14 @@
+restart-times: 5
+jobscript: "slurm-jobscript.sh"
+cluster: "slurm-submit.py"
+cluster-status: "slurm-status.py"
+max-jobs-per-second: 1
+max-status-checks-per-second: 10
+local-cores: 1
+jobs: 30
+keep-going: true
+reason: false
+printshellcmds: true
+jobname: "{name}.{jobid}.snakejob"
+use-conda: true
+conda-prefix: /mnt/beegfs/userdata/r_jelin/SC_DNA/single-cell-DNA-seq/envs/
