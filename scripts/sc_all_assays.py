@@ -48,7 +48,7 @@ else:
     sample=ms.load(config["output_sample_path"]+"/"+args.sample_name+"/results/"+args.sample_name+".dna.h5", raw=False, apply_filter=True, single=True)
     
 try:
-    snv_method_dimred=config["all_norm_dimred"]["snv"]["snv_method_dimred"]
+    snv_method_dimred=config["all_norm_dimred"]["snv"]["method_dimred"]
 except KeyError:
    snv_method_dimred="pca" 
 try:
@@ -76,7 +76,7 @@ try:
 except KeyError:
     cnv_method_clustering_res=0.5
 try:
-    prot_norm=config["all_norm_dimred"]["prot"]["prot_normalization"]
+    prot_norm=config["all_norm_dimred"]["prot"]["normalization"]
 except KeyError:
     prot_norm="CLR"
 try:
