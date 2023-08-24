@@ -336,43 +336,43 @@ fig.write_html(str_path_result_path+"combined_sortby_dna_flatten.html")
 try:
     list_variants_of_interest=config["all_norm_dimred"]["variants_of_interest"]
 except KeyError:
-    list_variants_of_interest=[]
+    list_variants_of_interest=None
 try:
     chr_of_interest=config["all_norm_dimred"]["chr_of_interest"]
 except KeyError:
-    chr_of_interest=[]
+    chr_of_interest=None
 
+if len(list_variants_of_interest) != None:
+    make_label_for_each_variants(sample,list_variants_of_interest)
     
-make_label_for_each_variants(sample,list_variants_of_interest)
-
-cartesian_product_of_variants_of_interest=make_cartesian_product_of_variants(sample)
-
-sample.dna.row_attrs["label_genotype"]=make_label(sample,cartesian_product_of_variants_of_interest)
-
-new_palette={np.unique(sample.dna.row_attrs["label_genotype"])[i]:ms.COLORS[i] for i in range(0,len(np.unique(sample.dna.row_attrs["label_genotype"])))}
-
-sample.dna.set_palette(new_palette)
-
-sample.cnv.set_palette(new_palette)
-
-sample.cnv.compute_ploidy(diploid_cells=sample.dna.barcodes())
+    cartesian_product_of_variants_of_interest=make_cartesian_product_of_variants(sample)
     
-fig=sample.dna.scatterplot(attribute="umap",colorby="label_genotype")
-fig.write_html(str_path_result_path+"UMAP_snv_colorby_voi.html")
-
-fig=sample.dna.heatmap(attribute="AF_MISSING",splitby="label_genotype")
-fig.write_html(str_path_result_path+"heatmap_snv_colorby_label_genotype.html")
-
-sample.cnv.row_attrs["label_genotype"]=sample.dna.row_attrs["label_genotype"]
-
-fig=sample.cnv.heatmap('ploidy',features=chr_of_interest,convolve=100,splitby="label_genotype")
-fig.write_html(str_path_result_path+"heatmap_ploidy_cnv_colorby_voi_convolve.html")
-
-fig=sample.cnv.heatmap('ploidy', features=chr_of_interest,splitby="label_genotype")
-fig.write_html(str_path_result_path+"heatmap_ploidy_cnv_colorby_voi.html")
-
-str_path_result_path_genotype_label=config["output_sample_path"]+"/"+args.sample_name+"/all/label_genotype/"
-directory_result=Path(str_path_result_path).mkdir(parents=True, exist_ok=True)
+    sample.dna.row_attrs["label_genotype"]=make_label(sample,cartesian_product_of_variants_of_interest)
+    
+    new_palette={np.unique(sample.dna.row_attrs["label_genotype"])[i]:ms.COLORS[i] for i in range(0,len(np.unique(sample.dna.row_attrs["label_genotype"])))}
+    
+    sample.dna.set_palette(new_palette)
+    
+    sample.cnv.set_palette(new_palette)
+    
+    sample.cnv.compute_ploidy(diploid_cells=sample.dna.barcodes())
+        
+    fig=sample.dna.scatterplot(attribute="umap",colorby="label_genotype")
+    fig.write_html(str_path_result_path+"UMAP_snv_colorby_voi.html")
+    
+    fig=sample.dna.heatmap(attribute="AF_MISSING",splitby="label_genotype")
+    fig.write_html(str_path_result_path+"heatmap_snv_colorby_label_genotype.html")
+    
+    sample.cnv.row_attrs["label_genotype"]=sample.dna.row_attrs["label_genotype"]
+    
+    fig=sample.cnv.heatmap('ploidy',features=chr_of_interest,convolve=100,splitby="label_genotype")
+    fig.write_html(str_path_result_path+"heatmap_ploidy_cnv_colorby_voi_convolve.html")
+    
+    fig=sample.cnv.heatmap('ploidy', features=chr_of_interest,splitby="label_genotype")
+    fig.write_html(str_path_result_path+"heatmap_ploidy_cnv_colorby_voi.html")
+    
+    str_path_result_path_genotype_label=config["output_sample_path"]+"/"+args.sample_name+"/all/label_genotype/"
+    directory_result=Path(str_path_result_path).mkdir(parents=True, exist_ok=True)
 
 #for i in regex_search_pattern_in_list(r"^\w*_label$",sample.dna.row_attrs.keys()):
 #    fig=sample.dna.heatmap(attribute="AF_MISSING",splitby=i)
@@ -386,28 +386,28 @@ directory_result=Path(str_path_result_path).mkdir(parents=True, exist_ok=True)
 #    fig=sample.cnv.plot_ploidy(i)
 #    fig.write_html(str_path_result_path_genotype_label+"cnv_ploidy_plot_"+i+".html")
 
-if config["type_analysis"] == "dna+protein":
-    sample.protein.row_attrs["label_genotype"]=sample.dna.row_attrs["label_genotype"]
-    sample.protein.set_palette(new_palette)
-    table_distribution = {'clusters':sample.protein.row_attrs["label"],'annotation':sample.protein.row_attrs["label_genotype"]}
-    table_distribution_df = pd.DataFrame(table_distribution,index=sample.protein.barcodes())
-    table_distribution_df=pd.crosstab(index=table_distribution_df['annotation'], columns=table_distribution_df['clusters'])
-    
-    table_distribution_df=pd.DataFrame(table_distribution_df.T.values,columns=np.array(table_distribution_df.T.columns),index=np.array(table_distribution_df.T.index))
-    
-    new=pd.DataFrame()
-    columns_to_compute=table_distribution_df.columns
-    for i in columns_to_compute:
-        new[i] = (table_distribution_df[i] / table_distribution_df[i].sum()) * 100
-    
-    
-    new.T.plot(kind='bar',stacked=True,color=sample.protein.get_palette()).legend(loc='upper left')
-    plt.legend(loc=(1.05, 0.5))
-    plt.gcf().set_size_inches(10, 10)
-    plt.savefig(str_path_result_path+'barplot_merged_protein_distribution.png')
-    
-    fig=sample.protein.heatmap(attribute='normalized_counts',splitby="label_genotype")
-    fig.write_html(str_path_result_path+"heatmap_proteine_splitby_genotype_label.html")
+    if config["type_analysis"] == "dna+protein":
+        sample.protein.row_attrs["label_genotype"]=sample.dna.row_attrs["label_genotype"]
+        sample.protein.set_palette(new_palette)
+        table_distribution = {'clusters':sample.protein.row_attrs["label"],'annotation':sample.protein.row_attrs["label_genotype"]}
+        table_distribution_df = pd.DataFrame(table_distribution,index=sample.protein.barcodes())
+        table_distribution_df=pd.crosstab(index=table_distribution_df['annotation'], columns=table_distribution_df['clusters'])
+        
+        table_distribution_df=pd.DataFrame(table_distribution_df.T.values,columns=np.array(table_distribution_df.T.columns),index=np.array(table_distribution_df.T.index))
+        
+        new=pd.DataFrame()
+        columns_to_compute=table_distribution_df.columns
+        for i in columns_to_compute:
+            new[i] = (table_distribution_df[i] / table_distribution_df[i].sum()) * 100
+        
+        
+        new.T.plot(kind='bar',stacked=True,color=sample.protein.get_palette()).legend(loc='upper left')
+        plt.legend(loc=(1.05, 0.5))
+        plt.gcf().set_size_inches(10, 10)
+        plt.savefig(str_path_result_path+'barplot_merged_protein_distribution.png')
+        
+        fig=sample.protein.heatmap(attribute='normalized_counts',splitby="label_genotype")
+        fig.write_html(str_path_result_path+"heatmap_proteine_splitby_genotype_label.html")
     
 """
 if config["type_analysis"] == "dna":
