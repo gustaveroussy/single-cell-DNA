@@ -84,9 +84,13 @@ try:
 except KeyError:
     na_filtering_percent=25
 try:
-    bool_predict_missing_value=config["snv_norm_dimred"]["predict_missing_value"]
+    bool_predict_missing_value=config["filtering"]["predict_missing_value"]
 except KeyError:
     bool_predict_missing_value=False
+try:
+    filtering_na=config["filtering"]["filter_na"]
+except KeyError:
+    filtering_na=False
 
 print('\nFiltering low quality variants')
 dna_vars = sample.dna.filter_variants(min_dp=min_dp,

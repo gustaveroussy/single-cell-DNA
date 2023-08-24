@@ -349,7 +349,13 @@ def make_yaml(config_file):
     
     design_file=pd.read_csv(config_file["design_file"],sep="\t")
     
-    panel_name_dna=config_file["panel_path"].split("/")[::-1][0]
+    
+    try:
+        panel_path=config_file["panel_path"]
+    except KeyError:
+        panel_path="/mnt/beegfs/pipelines/single-cell_dna/tapestri_database/v2/panels/Myeloid"
+        
+    panel_name_dna=panel_path.split("/")[::-1][0]
     
     try:
         reference_genome_path=config_file["reference_genome_path"]
