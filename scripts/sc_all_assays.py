@@ -92,7 +92,7 @@ try:
 except KeyError:
     prot_method_clustering_res=0.5
 try:
-    bool_predict_missing_value=config["all_norm_dimred"]["snv_predict_missing_value"]
+    bool_predict_missing_value=config["all_norm_dimred"]["snv"]["predict_missing_value"]
 except KeyError:
     bool_predict_missing_value=False
 
