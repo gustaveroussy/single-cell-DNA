@@ -418,6 +418,7 @@ def make_yaml(config_file):
         file_path=str(config_file["input_sample_path"])+"/"+str(design_file.iloc[row]["sample_id"])+"/"+str(design_file.iloc[row]["sample_id"])+"_config_panel.yaml"
         stream=open(file_path,'w')
         yaml.dump(dict_panel,stream,default_flow_style=False)
+        stream.close()
 
 def cnv_select_barcodes_and_normalization(assay,barcodes_list):
 
