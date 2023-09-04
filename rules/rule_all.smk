@@ -55,10 +55,18 @@ def get_targets(steps):
     
     
     if "phylogeny" in steps:
-    
-        target["phylogeny"]=[
-        expand(config["output_sample_path"]+"/{i_sample}/dna/compass/QC_annotation/whitelist.csv",i_sample=sample_list),
-        expand(config["output_sample_path"]+"/{i_sample}/dna/compass/QC_annotation/output",i_sample=sample_list)
-        ]
+        
+        if len(config["phylogeny"]["methods"]) == 1 and "COMPASS" in config["phylogeny"]["methods"]:
+            target["phylogeny"]=[
+            expand(config["output_sample_path"]+"/{i_sample}/dna/compass/QC_annotation/whitelist.csv",i_sample=sample_list),
+            expand(config["output_sample_path"]+"/{i_sample}/dna/compass/QC_annotation/output",i_sample=sample_list)
+            ]
+            
+        if len(config["phylogeny"]["methods"]) == 1 and "infSCITE" in config["phylogeny"]["methods"] :
+            target["phylogeny"]=[
+            expand(config["output_sample_path"]+"/{i_sample}/dna/infscite/input/",i_sample=sample_list),
+            expand(config["output_sample_path"]+"/{i_sample}/dna/infscite/secondary_output/",i_sample=sample_list),
+            expand(config["output_sample_path"]+"/{i_sample}/dna/infscite/output/{i_sample}_map0_remap_color.gv",i_sample=sample_list)
+            ]
 
     return(target)
