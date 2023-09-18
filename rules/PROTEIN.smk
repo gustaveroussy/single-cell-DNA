@@ -79,7 +79,7 @@ if "DSB" in normalisation_list:
             """
     rule prot_make_norm:
         input:
-            sample=config["output_sample_path"]+"/{i_sample}/h5/dna/filtering/QC_{i_sample}.h5"
+            sample=config["output_sample_path"]+"/{i_sample}/h5/prot/norm_QC.h5"
         output:
             new_sample=config["output_sample_path"]+"/{i_sample}/h5/prot/norm_QC_V2.h5",
         conda:

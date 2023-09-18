@@ -43,9 +43,22 @@ def get_targets(steps):
         
     if "PROTEIN" in steps:
     
-        target["PROTEIN"]=[
-        expand(config["output_sample_path"]+"/{i_sample}/h5/prot/dimred_QC_max_n_dim.h5",i_sample=sample_list)
-        ]
+        if "DSB" in config["prot_norm_dimred"]["normalization"]:
+        
+            target["PROTEIN"]=[
+            expand(config["output_sample_path"]+"/{i_sample}/prot/normalization/reads_counts/{i_sample}_read_counts.tsv",i_sample=sample_list),
+            expand(config["output_sample_path"]+"/{i_sample}/prot/normalization/reads_counts/{i_sample}_read_counts_dsb_normalization.csv",i_sample=sample_list),
+            expand(config["output_sample_path"]+"/{i_sample}/h5/prot/norm_QC.h5",i_sample=sample_list),
+            expand(config["output_sample_path"]+"/{i_sample}/h5/prot/norm_QC_V2.h5",i_sample=sample_list),
+            expand(config["output_sample_path"]+"/{i_sample}/h5/prot/dimred_QC_max_n_dim.h5",i_sample=sample_list),
+            ]
+            
+        else:
+        
+            target["PROTEIN"]=[
+            expand(config["output_sample_path"]+"/{i_sample}/h5/prot/dimred_QC_max_n_dim.h5",i_sample=sample_list),
+            expand(config["output_sample_path"]+"/{i_sample}/h5/prot/norm_QC_V2.h5",i_sample=sample_list)
+            ]
         
     if "ALL" in steps:
         
@@ -62,11 +75,19 @@ def get_targets(steps):
             expand(config["output_sample_path"]+"/{i_sample}/dna/compass/QC_annotation/output",i_sample=sample_list)
             ]
             
-        if len(config["phylogeny"]["methods"]) == 1 and "infSCITE" in config["phylogeny"]["methods"] :
+        if len(config["phylogeny"]["methods"]) == 1 and "infSCITE" in config["phylogeny"]["methods"]:
             target["phylogeny"]=[
             expand(config["output_sample_path"]+"/{i_sample}/dna/infscite/input/",i_sample=sample_list),
             expand(config["output_sample_path"]+"/{i_sample}/dna/infscite/secondary_output/",i_sample=sample_list),
-            expand(config["output_sample_path"]+"/{i_sample}/dna/infscite/output/{i_sample}_map0_remap_color.gv",i_sample=sample_list)
+            expand(config["output_sample_path"]+"/{i_sample}/dna/infscite/output/",i_sample=sample_list)
             ]
-
+            
+        if len(config["phylogeny"]["methods"]) == 2 and "infSCITE" in config["phylogeny"]["methods"]:
+            target["phylogeny"]=[
+            expand(config["output_sample_path"]+"/{i_sample}/dna/compass/QC_annotation/whitelist.csv",i_sample=sample_list),
+            expand(config["output_sample_path"]+"/{i_sample}/dna/compass/QC_annotation/output",i_sample=sample_list),
+            expand(config["output_sample_path"]+"/{i_sample}/dna/infscite/input/",i_sample=sample_list),
+            expand(config["output_sample_path"]+"/{i_sample}/dna/infscite/secondary_output/",i_sample=sample_list),
+            expand(config["output_sample_path"]+"/{i_sample}/dna/infscite/output/",i_sample=sample_list)
+            ]
     return(target)

@@ -87,6 +87,8 @@ if "COMPASS" in config["phylogeny"]["methods"]:
             
 if "infSCITE" in config["phylogeny"]["methods"]:
 
+    #ruleorder: infscite_prepare_csv > run_infSCITE > change_color_infSCITE
+
     rule infscite_prepare_csv:
         input:
             sample=config["output_sample_path"]+"/{i_sample}/h5/all/all_assays.h5",
@@ -148,5 +150,4 @@ if "infSCITE" in config["phylogeny"]["methods"]:
             mkdir -p {output.output_folder}
             python3 {params.workflow_dir}/scripts/sc_infscite_change_color_gv.py --input_gv {input.gv_input_path} --output_gv {output.gv_output_path}
             dot -Tpng -o {output.png_output_path} {output.gv_output_path}
-
             """

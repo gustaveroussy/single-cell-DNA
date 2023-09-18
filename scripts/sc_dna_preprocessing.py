@@ -241,7 +241,7 @@ if advanced_filtration == True:
     # on garde les variants dont la mutation n'est pas intronique ou dont l'impact de la mutation n'est pas synonyme
     annotation = annotation.loc[(annotation['Coding impact']) != '']
 
-    annotation.to_csv(main_output_path+"dna/diagnostic/QC_advanced_annotation.csv")
+    annotation.to_csv(main_output_path+"dna/annotation/QC_advanced_annotation.csv")
 
 mio.save(sample=sample,path=args.ouput_h5,raw=False)
 
@@ -267,7 +267,7 @@ if p_value < 0.05:
     plt.xlabel('Factors')
     plt.ylabel('Eigenvalue')
     plt.grid()
-    plt.savefig(main_output_path+"dna/elbow/elbowplot_pca.png")
+    plt.savefig(main_output_path+"dna/elbow/elbowplot_fa.png")
 
 print('\nElbow plot PCA\n')
 variants_number = sample.dna.shape[1]
@@ -277,5 +277,5 @@ sample.dna.run_pca(components=variants_number,
                 show_plot=True,
                 output_label="pca")
 
-plt.savefig(main_output_path+"dna/elbow/elbowplot_fa.png")
+plt.savefig(main_output_path+"dna/elbow/elbowplot_pca.png")
 plt.close()

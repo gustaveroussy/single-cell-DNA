@@ -289,8 +289,9 @@ if config["type_analysis"] == "dna+protein":
     fig=sample.protein.scatterplot(attribute=snv_umap, colorby="normalized_counts", features=feats)
     fig.write_html(str_path_result_path+"UMAP_snv_colorby_protein_expression.html")
     
-    #fig=sample.protein.ridgeplot(attribute='normalized_counts',features=sample.protein.ids(),splitby=sample.dna.get_labels())
-    #fig.write_html(str_path_result_path+"ridgeplot_splitby_snv_clustering.html")
+    sample.protein.row_attrs["dna_label"]=sample.dna.row_attrs["label"]
+    fig=sample.protein.ridgeplot(attribute='normalized_counts',features=sample.protein.ids(),splitby="dna_label")
+    fig.write_html(str_path_result_path+"ridgeplot_splitby_snv_clustering.html")
     
     fig=sample.protein.scatterplot(attribute="umap",colorby="label")
     fig.write_html(str_path_result_path+"UMAP_prot_colorby_label.html")
@@ -307,6 +308,10 @@ fig.write_html(str_path_result_path+"UMAP_snv_colorby_allelic_fraction.html")
     
 fig=sample.dna.scatterplot(attribute="umap", colorby="NGT", features=feats)
 fig.write_html(str_path_result_path+"UMAP_snv_colorby_genotype.html")
+
+#sample.dna.layers[""] # plot the first 3 variants
+#fig = sample.dna.scatterplot(attribute="umap", colorby="AF_MISSING", features=feats)
+#fig.write_html(str_path_result_path+"UMAP_snv_colorby_allelic_fraction.html")
 
 df_dna=pd.DataFrame(sample.dna.layers["AF_MISSING"],columns=sample.dna.col_attrs["id"],index=sample.dna.row_attrs["barcode"])
 df_dna["label"]=sample.dna.row_attrs["label"]
@@ -326,7 +331,6 @@ fig.write_html(str_path_result_path+"UMAP_snv_colorby_label.html")
 fig=sample.cnv.scatterplot(attribute="umap",colorby="label")
 fig.write_html(str_path_result_path+"UMAP_cnv_colorby_label.html")
   
-
 fig = sample.heatmap(clusterby='dna', sortby='dna', flatten=True,quantify_dna_mut=True,flatten_samples=True)
 fig.data[2].colorscale = 'magma'
 
@@ -373,6 +377,10 @@ if len(list_variants_of_interest) != None:
     
     str_path_result_path_genotype_label=config["output_sample_path"]+"/"+args.sample_name+"/all/label_genotype/"
     directory_result=Path(str_path_result_path).mkdir(parents=True, exist_ok=True)
+    
+    #fig=sample.heatmap(clusterby='label_genotype', sortby='dna', flatten=False)
+    #fig.data[2].colorscale = 'magma'
+    #fig.write_html(str_path_result_path+"combined_sortby_label_genotype.html")
 
 #for i in regex_search_pattern_in_list(r"^\w*_label$",sample.dna.row_attrs.keys()):
 #    fig=sample.dna.heatmap(attribute="AF_MISSING",splitby=i)

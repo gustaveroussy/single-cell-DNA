@@ -15,9 +15,9 @@ import ast
 
 os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE"
 
-lib_to_import=re.sub(r"/\w*.py","/",sys.argv[0])
-sys.path.append(lib_to_import)
-from function_utils import *
+lib_to_import=sys.argv[0].replace("/scripts/save_counts_prot.py", "/")
+sys.path.append(lib_to_import+"/common")
+from utils import *
 
 config=sys.argv[-1]
 config=ast.literal_eval(config)
