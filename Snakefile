@@ -13,7 +13,7 @@ import sys
 PIPELINE_FOLDER=Path(snakemake.workflow.srcdir(""))
 PIPELINE_COMPASS_PREPROCESS=str(PIPELINE_FOLDER)+"/envs/conda/preprocess.yaml"
 #SING_IMG="/mnt/beegfs/pipelines/single-cell_dna/1.0"+"/envs/singularity/SCDNA_compass.simg"
-#SING_IMG_DSB="/mnt/beegfs/pipelines/single-cell_dna/1.0"+"/envs/singularity/single_cell_dna_dsb.simg"
+SING_IMG_DSB="/mnt/beegfs/pipelines/single-cell_dna/1.1"+"/envs/singularity/single_cell_dna_dsb.simg"
 CONDA_MOSAIC_ENV=str(PIPELINE_FOLDER)+"/envs/conda/environment_mosaic_droplet.yml"
 CONDA_DSB_ENV=str(PIPELINE_FOLDER)+"/envs/conda/environement_dsb.yaml"
 CONFIG_FILE_PATH=sys.argv[6]
