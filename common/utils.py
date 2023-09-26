@@ -12,7 +12,10 @@ import yaml
 import math
 from sklearn.cluster import OPTICS
 import itertools
-
+import igraph
+import missionbio.mosaic as ms
+import missionbio.mosaic.io as mio
+from missionbio.mosaic.constants import COLORS
 def flatten(l):
     """return in one list a list of list"""
     return [item for sublist in l for item in sublist]
@@ -183,7 +186,7 @@ def make_clustering(assay,arg_attribute_assay,arg_method_clustering,arg_max_comp
         if arg_method_clustering in ['dbscan','hdbscan']:
             # iterate over max number of components
             if arg_attribute_assay in ['protein']:
-                for element_in_range in range(2,arg_max_components+1):
+                for element_in_range in range(2,arg_max_components):
                     for pattern_method_norm in ["umap_DSB_ndim_"+str(element_in_range),
                                                         "umap_CLR_ndim_"+str(element_in_range),
                                                         "umap_asinh_ndim_"+str(element_in_range),
@@ -218,7 +221,7 @@ def make_clustering(assay,arg_attribute_assay,arg_method_clustering,arg_max_comp
             elif arg_method_clustering == "leiden":
                 for i in dimred_list:
                     for clustering_value in clustering_value_range:
-                        tmp=clustering_leiden(getattr(assay,arg_attribute_assay),clustering_value,k=200)
+                        tmp=clustering_leiden(assay=getattr(assay,arg_attribute_assay),attribute=i,resolution=clustering_value,k=20,show_plot=False)
                         tmp=getattr(assay,arg_attribute_assay).row_attrs['label']
                         getattr(assay,arg_attribute_assay).row_attrs[i+'_leiden_'+str(clustering_value)]=tmp
 
@@ -300,12 +303,12 @@ def clustering_leiden(assay,attribute,resolution,k,show_plot=False):
             plt.xlabel("Number of nearest neighbors used")
         
         vc_labels=np.array([str(i) for i in vc_labels])
-        new_palette={str(i):ms.COLORS[i] for i in range(0,len(np.unique(vc_labels))+1)}
+        new_palette={str(i):ms.COLORS[i] for i in range(0,len(np.unique(vc_labels)))}
         assay.set_palette(new_palette)
         assay.row_attrs["label"]=vc_labels
 
 def plot_clustering(assay,arg_attribute_assay,arg_method_clustering,arg_max_components,args_directory_result,args_normalization=None):
-    for i_pca in range(2,arg_max_components+1):
+    for i_pca in range(2,arg_max_components):
         if arg_attribute_assay in ['protein']:
             attribute_umap="umap_"+str(args_normalization)+"_ndim_"+str(i_pca)
         if arg_attribute_assay in ['dna','cnv']:
