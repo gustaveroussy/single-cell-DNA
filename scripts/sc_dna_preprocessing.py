@@ -194,17 +194,18 @@ mean_percent_vaf=pd.DataFrame(sample.dna.layers["AF_MISSING"],columns=sample.dna
 df_vaf=pd.DataFrame(mean_percent_vaf,index=sample.dna.ids(),columns=["mean_vaf"])
 variant_to_keep=list(df_vaf[df_vaf.mean_vaf <= int(max_vaf_percent)].index)
 
+final_vars = list(set(list(variant_to_keep) + target_variants))
+sample.dna = sample.dna[sample.dna.barcodes(), final_vars]
+
+mio.save(sample=sample,path=args.output_h5,raw=False)
 
 if bool_predict_missing_value == True:
     print("\nImputing missing VAF & filtering germinal variants")
     X=sample.dna.layers["AF_MISSING"]
     X_nan = np.where(X==-50, np.nan, X)
-    imputer = KNNImputer(n_neighbors=5)
+    imputer = KNNImputer(n_neighbors=20)
     imput_matrix=imputer.fit_transform(X_nan)
     sample.dna.layers["AF_MISSING"]=imput_matrix
-
-final_vars = list(set(list(variant_to_keep) + target_variants))
-sample.dna = sample.dna[sample.dna.barcodes(), final_vars]
 
 print("\nSaving Annotation")
 annotation.to_csv(main_output_path+"dna/annotation/QC_annotation.csv")
@@ -242,9 +243,6 @@ if advanced_filtration == True:
     annotation = annotation.loc[(annotation['Coding impact']) != '']
 
     annotation.to_csv(main_output_path+"dna/annotation/QC_advanced_annotation.csv")
-
-mio.save(sample=sample,path=args.ouput_h5,raw=False)
-
 
 
 chi_square_value,p_value=calculate_bartlett_sphericity(pd.DataFrame(sample.dna.layers["AF_MISSING"]))

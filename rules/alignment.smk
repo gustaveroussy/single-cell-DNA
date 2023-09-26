@@ -13,7 +13,7 @@ rule create_panel:
         time_min = (lambda wildcards, attempt: min(attempt * 10, 60))
     shell:
         """
-        python3 {params.workflow_dir}/scripts/create_panel.py {params.config_file}
+        python3 {params.workflow_dir}/scripts/create_yaml.py {params.config_file}
         """
         
         
@@ -33,7 +33,7 @@ if config["type_analysis"] == "dna":
             file_output=config["output_sample_path"]+"/{i_sample}"
         shell:
             """
-            bash {params.workflow_dir}/scripts/run_dna_alignment.sh {params.file_output} {input.configfile_i}
+            bash {params.workflow_dir}/scripts/run_alignment_dna.sh {params.file_output} {input.configfile_i}
             """
         
 if config["type_analysis"] == "dna+protein":    

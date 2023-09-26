@@ -16,15 +16,17 @@ def get_targets(steps):
     except KeyError:
         normalisation_list=["CLR"]
 
-    if "Alignment" in steps:
+    if "alignment" in steps:
         if config["type_analysis"] == "dna":
-
-            target["Alignment"]=[
+        
+            target["alignment"]=[
                 expand(config["input_sample_path"]+"/{i_sample}/{i_sample}_config_panel.yaml",i_sample=sample_list),
                 expand(config["output_sample_path"]+"/{i_sample}/results/{i_sample}.dna.h5",i_sample=sample_list)
             ]
+            
         if config["type_analysis"] == "dna+protein":
-                target["Alignment"]=[
+        
+                target["alignment"]=[
                 expand(config["input_sample_path"]+"/{i_sample}/{i_sample}_config_panel.yaml",i_sample=sample_list),
                 expand(config["output_sample_path"]+"/{i_sample}/{i_sample}.dna+protein.h5",i_sample=sample_list)
             ]

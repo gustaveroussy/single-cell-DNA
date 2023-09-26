@@ -62,7 +62,7 @@ if bool_predict_missing_value == True:
     # replace -50 value with NaN
     X_nan = np.where(X==-50, np.nan, X)
     # K-nearest neighbors imputer
-    imputer = KNNImputer(n_neighbors=5)
+    imputer = KNNImputer(n_neighbors=20)
     imput_matrix=imputer.fit_transform(X_nan)
     #replace with new predict matrix
     sample.dna.layers["AF_MISSING"]=imput_matrix

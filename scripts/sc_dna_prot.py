@@ -54,11 +54,11 @@ for i_method_norm in normalisation_list:
 
 sample=make_umap(sample,'protein')
 
-
 for i_method in prot_clustering_method_list:
     sample=make_clustering(assay=sample,arg_attribute_assay="protein",arg_method_clustering=i_method,arg_max_components=max_components)
                             
-                     
+mio.save(sample=sample,path=args.output_h5,raw=False)
+
 for i_method in normalisation_list:
     for i_method_clustering in prot_clustering_method_list:
         str_path_result_path=config["output_sample_path"]+"/"+args.sample_name+"/prot/clustering/"+i_method+"/"+i_method_clustering+"/"
@@ -70,10 +70,7 @@ for i_method in normalisation_list:
         arg_max_components=max_components,
         args_directory_result=str_path_result_path,
         args_normalization=i_method)
-        
         fig=sample.protein.ridgeplot(attribute='normalized_counts_'+i_method,features=sample.protein.ids())
         
         Path(config["output_sample_path"]+"/"+args.sample_name+"/prot/ridgleplot/").mkdir(parents=True, exist_ok=True)
         fig.write_html(config["output_sample_path"]+"/"+args.sample_name+"/prot/ridgleplot/ridgleplot_+"+i_method_norm+".html")
-
-mio.save(sample=sample,path=args.output_h5,raw=False)

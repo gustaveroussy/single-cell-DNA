@@ -214,9 +214,6 @@ if config["type_analysis"] == "dna+protein":
     sample.protein.cluster(attribute="umap",
                             method=prot_method_clustering,
                             **prot_res_clustering_method)
-    
-    if prot_norm == "DSB":
-        prot_normsample.protein.layers["normalized_counts"]=sample_prot.protein.layers["normalized_counts_DSB_znorm"]
         
 
 print("Making figures")
@@ -346,7 +343,7 @@ try:
 except KeyError:
     chr_of_interest=None
 
-if len(list_variants_of_interest) != None:
+if list_variants_of_interest != None:
     make_label_for_each_variants(sample,list_variants_of_interest)
     
     cartesian_product_of_variants_of_interest=make_cartesian_product_of_variants(sample)

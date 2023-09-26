@@ -19,9 +19,9 @@ CONDA_DSB_ENV=str(PIPELINE_FOLDER)+"/envs/conda/environement_dsb.yaml"
 CONFIG_FILE_PATH=sys.argv[6]
 SING_IMG=str(PIPELINE_FOLDER)+"/envs/singularity/tree_building_container.simg"
 
-lib_to_import=str(PIPELINE_FOLDER)+"/common/" 
-sys.path.append(lib_to_import)
-from utils import *
+#lib_to_import=str(PIPELINE_FOLDER)+"/common/" 
+#sys.path.append(lib_to_import)
+#from utils import *
 
 GLOBAL_TMP = config['tmp'] if 'tmp' in config else "/tmp"
 if os.path.normpath(GLOBAL_TMP) != "/tmp" :
@@ -31,7 +31,7 @@ if os.path.normpath(GLOBAL_TMP) != "/tmp" :
         sys.stderr.write(GLOBAL_TMP + " doesn't exist! Temporary directory is set to /tmp \n")
         GLOBAL_TMP = "/tmp"
 
-sample_list=[sample for sample in config["sample"] if sample in os.listdir(config["input_sample_path"])]
+sample_list=[sample for sample in config["sample"]]
 
 i_steps=config["steps"]
 
@@ -43,7 +43,7 @@ rule all:
     message:
         "pipeline goes all way long through your step(s)"
 
-if "Alignment" in i_steps:
+if "alignment" in i_steps:
     include: "rules/alignment.smk"
 
 if "filtering" in i_steps:
@@ -59,5 +59,4 @@ if "ALL" in i_steps:
     include: "rules/ALL.smk"
     
 if "phylogeny" in i_steps:
-
     include: "rules/phylogeny.smk"
